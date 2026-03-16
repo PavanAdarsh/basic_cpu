@@ -58,7 +58,7 @@ module main(clk);
     assign rd = IR[5:3];
     assign immediate = IR[2:0];
     
-    assign imm_extend = {{13{immediate[2]}},immediate}; //sign extension
+    //assign imm_extend = {{13{immediate[2]}},immediate}; //sign extension
     
     assign data_in = read_data2;
     assign data_addr = ALUout[7:0];
@@ -79,6 +79,9 @@ module main(clk);
     
     //inputs are pc, outputs ir
     instruction_mem IM(.PC(PC),.IR(IR));
+    
+    //inputs are IR, outputs sign-extended immediate
+    IR_decoded IRD(.IR(IR),.imm_extend(imm_extend));
     
     //inputs opcode, output all control signals
     control_unit CU(.opcode(opcode),.ALUsrc1(ALUsrc1),.ALUsrc2(ALUsrc2),.reg_write(reg_write),.reg_dst(reg_dst),.mem_read(mem_read),.mem_write(mem_write),.mem_to_reg(mem_to_reg),.branch(branch),.halt(halt));
