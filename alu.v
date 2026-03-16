@@ -20,9 +20,9 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module alu(A,B,opcode,result,Z,C,N,V);
+module alu(A,B,ALUcontrol,result,Z,C,N,V);
 input [15:0] A,B;
-input [3:0] opcode;
+input [2:0] ALUcontrol;
 output reg [15:0] result;
 output Z,N;
 output reg C,V;
@@ -31,6 +31,7 @@ always@(*) begin
     result = 0;
     C = 0;
     V = 0;
+    /*
     case(opcode)
         4'd0,4'd1,4'd6,4'd7: begin 
              {C,result} = A + B; 
@@ -45,6 +46,16 @@ always@(*) begin
         4'd10: result = A << B; //shift left
         4'd11: result = A >> B; //shift right
         default: result = 0; //for all other opcodes
+    endcase
+    */
+    case(ALUcontrol)
+        3'd0: {C,result} = A + B;
+        3'd1: result = A - B;
+        3'd2: result = ~(A&B);
+        3'd3: result = ~(A|B);
+        3'd4: result = A << B;
+        3'd5: result = A >> B;
+        default: result = 0;
     endcase
 end
 

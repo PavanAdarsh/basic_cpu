@@ -49,6 +49,7 @@ module main(clk);
     
     //control_unit.v
     wire ALUsrc1,ALUsrc2,reg_write,reg_dst,mem_to_reg,branch,halt;
+    wire [2:0] ALUcontrol;
     
     
     //decoding instruction
@@ -84,13 +85,13 @@ module main(clk);
     IR_decoded IRD(.IR(IR),.imm_extend(imm_extend));
     
     //inputs opcode, output all control signals
-    control_unit CU(.opcode(opcode),.ALUsrc1(ALUsrc1),.ALUsrc2(ALUsrc2),.reg_write(reg_write),.reg_dst(reg_dst),.mem_read(mem_read),.mem_write(mem_write),.mem_to_reg(mem_to_reg),.branch(branch),.halt(halt));
+    control_unit CU(.opcode(opcode),.ALUsrc1(ALUsrc1),.ALUsrc2(ALUsrc2),.ALUcontrol(ALUcontrol),.reg_write(reg_write),.reg_dst(reg_dst),.mem_read(mem_read),.mem_write(mem_write),.mem_to_reg(mem_to_reg),.branch(branch),.halt(halt));
     
     //inputs clk, write_enable, write addr and write data, read addresses and outputs read data
     register_file RF(.clk(clk),.write_enable(reg_write),.read_addr1(rs),.read_addr2(rt),.read_data1(read_data1),.read_data2(read_data2),.write_addr(write_addr),.write_data(write_data));
     
     //inputs A and B along with opcode, outputs ALUout along with 4 flags
-    alu ALU0(.A(A),.B(B),.opcode(opcode),.result(ALUout),.Z(Z),.C(C),.N(N),.V(V));
+    alu ALU0(.A(A),.B(B),.ALUcontrol(ALUcontrol),.result(ALUout),.Z(Z),.C(C),.N(N),.V(V));
     
     //inputs are clk, data_addr, mem_read, mem_write, data_in, outputs data_out
     data_memory DM(.clk(clk),.data_addr(data_addr),.data_in(data_in),.data_out(data_out),.mem_read(mem_read),.mem_write(mem_write));

@@ -20,15 +20,17 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module control_unit(opcode,ALUsrc1,ALUsrc2,reg_write,reg_dst,mem_read,mem_write,mem_to_reg,branch,halt);
+module control_unit(opcode,ALUsrc1,ALUsrc2,ALUcontrol,reg_write,reg_dst,mem_read,mem_write,mem_to_reg,branch,halt);
     
     input [3:0] opcode;
     output reg ALUsrc1, ALUsrc2; //0 for register, 1 for immediate/program counter value
+    output reg [2:0] ALUcontrol; //for simplifying ALU
     output reg reg_write; //1 for writing into register file, 0 if not
     output reg mem_read, mem_write;
     output reg branch, halt;
     output reg reg_dst; //0 for r type, 1 for i type 
     output reg mem_to_reg; //1 for writing memory value into register file, instead of ALU op
+    
     
     always@(*) begin
         ALUsrc1 = 0; ALUsrc2 = 0; reg_write = 0; mem_to_reg = 0;
@@ -56,6 +58,17 @@ module control_unit(opcode,ALUsrc1,ALUsrc2,reg_write,reg_dst,mem_read,mem_write,
                     end
             4'd8: branch = 1;
             4'd15: halt = 1;
+        endcase
+    end
+    
+    always@(*) begin
+        case(opcode)
+            4'd0,4'd1,4'd6,4'd7: ALUcontrol = 3'd0; //add
+            4'd2: ALUcontrol = 3'd1; //sub
+            4'd4: ALUcontrol = 3'd2; //nand
+            4'd5: ALUcontrol = 3'd3; //nor
+            4'd10: ALUcontrol = 3'd4; //shift left
+            4'd11: ALUcontrol = 3'd5; //shift right
         endcase
     end
 endmodule
