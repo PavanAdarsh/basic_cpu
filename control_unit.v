@@ -56,8 +56,11 @@ module control_unit(opcode,ALUsrc1,ALUsrc2,ALUcontrol,reg_write,reg_dst,mem_read
                     reg_dst = 1;
                     ALUsrc2 = 1;
                     end
-            4'd8: branch = 1;
-            4'd15: halt = 1;
+            4'd8, 4'd9: begin
+                        ALUsrc2 = 1;
+                        branch = 1;
+                        end
+            4'd15: halt = 1; //halt
         endcase
     end
     

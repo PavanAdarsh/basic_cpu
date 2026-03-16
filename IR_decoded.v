@@ -29,6 +29,7 @@ module IR_decoded(IR,imm_extend);
             4'd0,4'd2,4'd4,4'd5: imm_extend = {{13{IR[2]}},IR[2:0]}; //ADD SUB NAND NOR
             4'd1,4'd6,4'd7,4'd10,4'd11: imm_extend = {{10{IR[5]}},IR[5:0]}; //ADDI LOAD STORE SHIFTS
             4'd8: imm_extend = {{7{IR[8]}},IR[8:0]}; //BEQZ
+            4'd9: imm_extend = {{3{IR[11]}},IR[11:0]}; //JMP
             default: imm_extend = {{13{IR[2]}},IR[2:0]};
         endcase
     end
